@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:14.04
 MAINTAINER Stephen Sloka <slokas@upmc.edu>
 
 # Install RabbitMQ
@@ -14,13 +14,19 @@ RUN mkdir /var/run/sshd
 RUN apt-get install openjdk-6-jdk -y
 
 #install ruby
+RUN apt-get install ruby -y
 RUN apt-get install ruby-dev -y
-RUN apt-get install make
+RUN apt-get install ruby1.9.1-dev -y
+RUN apt-get install make -y
+RUN gem install bundler
 RUN gem install cucumber
 
 #Create jenkins user
 RUN adduser jenkins 
 RUN echo "jenkins:jenkins" | chpasswd
+
+#mount the current project workspace under /project inside the container
+ADD . /workspace
 
 # Add scripts
 ADD run.sh /run.sh
